@@ -1,10 +1,15 @@
 # MyReads Project
 
-This is the starter template for the final assessment project for Udacity's React Fundamentals course. The goal of this template is to save you time by providing a static example of the CSS and HTML markup that may be used, but without any of the React code that is needed to complete the project. If you choose to start with this template, your job will be to add interactivity to the app by refactoring the static code in this template.
+If you are like me who likes books a lot, trys to read lot of books at the same time, you know it can get overwhelming in tracking what books we are currently reading, what we want to read and also what we already have read.
 
-Of course, you are free to start this project from scratch if you wish! Just be sure to use [Create React App](https://github.com/facebookincubator/create-react-app) to bootstrap the project.
+This app solves that problem now, we can have a simple tracking system where you can 
+* Where are the books you are reading currentlu - With `Currently Reading`
+* What books you have already read - With `Read`
+* WHat are the books you want to read - With `Want to Read`
 
-## TL;DR
+Not just this, you can also checkout the library with search and find scores of books that you might find intresting for future reading or already read.
+
+So all in all now I present you a personalized book tracking app called My Reads, try it out  :) 
 
 To get started developing right away:
 
@@ -90,3 +95,19 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 This repository is the starter code for _all_ Udacity students. Therefore, we most likely will not accept pull requests.
 
 For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
+<<<<<<< HEAD
+=======
+
+
+## Running the App
+
+To run the app, use same steps. 
+```
+npm install
+```
+ to set up and 
+```
+npm run
+```
+to run the application. Once that's done you can see the project chas all the required functionality.
+>>>>>>> Project 1
