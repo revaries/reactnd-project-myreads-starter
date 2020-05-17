@@ -29,7 +29,9 @@ class BooksApp extends React.Component {
             return eachBook.id !== bookId;
           });
           currentState[shelf] = value;
-          currentState[newShelf].push(book);
+          if (newShelf !== 'none') {
+            currentState[newShelf].push(book);
+          } 
           this.setState(currentState);
         });
   };
@@ -53,6 +55,8 @@ class BooksApp extends React.Component {
   addBookFromSearch = (bookId, shelf) => {
     BooksAPI.get(bookId).then(book => {
       let currentState = this.state;
+      currentState[shelf] = currentState[shelf]
+            .filter(eachBook => (eachBook.id !== bookId));
       currentState[shelf].push(book);
       this.setState(currentState);
     })

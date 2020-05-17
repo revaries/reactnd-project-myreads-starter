@@ -43,11 +43,6 @@ class SearchComponent extends Component {
   moveToShelf = (bookId, currentShelf, newShelf) => {
     BooksAPI.updatewithBookId(bookId, newShelf)
     .then(
-      this.setState((currentState) => ({
-        books : currentState['books'].filter(eachBook => {
-          return eachBook.id !== bookId;
-        })
-      })),
       this.props.updatePage(bookId, newShelf)
     )
   }
