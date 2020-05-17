@@ -6,8 +6,7 @@ import BookShelf from "./BookShelfComponent";
 
 class SearchComponent extends Component {
   state = {
-    books: [],
-    incorrectKey: true
+    books: []
   }
 
   clearBooks = () => {
@@ -23,10 +22,14 @@ class SearchComponent extends Component {
   }
 
   searchWithValue = (query) => {
+    let libraryBooks = this.props.libraryBooks;
     BooksAPI.search(query)
       .then(searchBooks => {
         if (Array.isArray(searchBooks)) {
-          searchBooks = searchBooks.map(eachBook => ({...eachBook, shelf: 'none'}))
+          searchBooks = searchBooks.map(eachBook => 
+            ({
+              ...eachBook,
+               shelf: libraryBooks[eachBook['id']]? libraryBooks[eachBook['id']]['shelf'] : 'none'}))
           this.setState({
             books: searchBooks
           })}

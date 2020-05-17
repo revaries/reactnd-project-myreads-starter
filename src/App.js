@@ -8,58 +8,55 @@ import SearchComponent from './Components/SearchComponent';
 
 class BooksApp extends React.Component {
 
-  titles = {
+  shelfs = {
     currentlyReading : "Currently Reading",
     wantToRead: "Want To Read",
     read: "Read"
   }
-  state = {
-    currentlyReading: [],
-    wantToRead: [],
-    read: []
+
+  state =  {
+    books: [],
+    ids: {}
   }
 
   moveShelf = (bookId, shelf, newShelf) => {
-      const book = this.state[shelf].find(eachBook => (eachBook.id===bookId));
-      book.shelf = newShelf;
-      BooksAPI.update(book, newShelf)
-        .then(() => {
-          let currentState = this.state;
-          let value = currentState[shelf].filter(eachBook => {
-            return eachBook.id !== bookId;
-          });
-          currentState[shelf] = value;
-          if (newShelf !== 'none') {
-            currentState[newShelf].push(book);
-          } 
-          this.setState(currentState);
-        });
+    let currentState = this.state;
+    if(currentState.ids[bookId]) {
+      currentState.ids[bookId]['shelf'] = newShelf;
+    }
+    this.setState(currentState);
   };
 
   componentDidMount() {
     BooksAPI.getAll().then(allBooks => {
-      this.setState({
-        currentlyReading: allBooks.filter(eachBook => {
-          return eachBook.shelf === 'currentlyReading'
-        }),
-        wantToRead: allBooks.filter(eachBook => {
-          return eachBook.shelf === 'wantToRead'
-        }),
-        read: allBooks.filter(eachBook => {
-          return eachBook.shelf === 'read'
+      if (Array.isArray(allBooks)) {
+        let books = []
+        let ids = {}
+        allBooks.forEach(eachBook => {
+          ids[eachBook.id] = eachBook;
+          books.push(eachBook);
         })
-      })
+         this.setState({
+           books: books,
+           ids: ids
+         });
+         console.log(this.state)
+      }
     }).catch(err => (console.log(err)));
+
   };
 
   addBookFromSearch = (bookId, shelf) => {
-    BooksAPI.get(bookId).then(book => {
-      let currentState = this.state;
-      currentState[shelf] = currentState[shelf]
-            .filter(eachBook => (eachBook.id !== bookId));
-      currentState[shelf].push(book);
-      this.setState(currentState);
-    })
+    let currentState = this.state;
+    if(currentState.ids[bookId]) {
+      currentState.ids[bookId]['shelf'] = shelf;
+    } else {
+      BooksAPI.get(bookId).then(book => {
+        currentState.ids[book.id] = book;
+        currentState.books.push(book);
+      })
+    }
+    this.setState(currentState);
   }
 
   render() {
@@ -72,12 +69,12 @@ class BooksApp extends React.Component {
                   </div>
                   <div className="list-books-content">
                     <div>
-                      { Object.keys(this.state).map((key, index) => {
+                      { Object.keys(this.shelfs).map((key) => {
                         return (
-                          <BookShelf
-                            key = {index}
-                            bookShelfTitle = {this.titles[key]}
-                            books = {this.state[key]}
+                          <BookShelf 
+                            key = {key}
+                            bookShelfTitle = {this.shelfs[key]}
+                            books = {this.state.books.filter(eachBook => (eachBook.shelf === key))}
                             updateShelf = {this.moveShelf}
                             bookShelf = {key}
                           />
@@ -93,6 +90,7 @@ class BooksApp extends React.Component {
           render={() => (
             <SearchComponent 
               updatePage = {this.addBookFromSearch}
+              libraryBooks = {this.state.ids}
             />
           )}
         />
